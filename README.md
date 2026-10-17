@@ -98,30 +98,38 @@ For link previews, add a 1200×630 image at `public/og-image.png` and this tag i
 
 ## Deploy
 
-The build uses relative asset paths (`base: './'`), so the same output works on a root domain or a GitHub Pages project path.
+This portfolio is built with React, TypeScript and Vite. The production build generates static files in the `dist` directory.
 
-### Vercel
+### Render
 
-1. Push the project to GitHub.
-2. In Vercel choose **Add New → Project** and import the repository.
-3. Vercel detects Vite. Build command `npm run build`, output directory `dist`. Deploy.
+1. Push the project to the GitHub repository on the `main` branch.
+2. In Render, select **New → Static Site** and connect the repository.
+3. Set the build command to `npm ci && npm run build`.
+4. Set the publish directory to `dist`.
+5. Click **Create Static Site** and wait for the deployment to complete.
 
-Or from the command line: `npm i -g vercel`, then `vercel` and follow the prompts. `vercel.json` adds long-lived caching for hashed assets.
+**Live portfolio:** [https://jayanth-portfolio-9y1p.onrender.com/](https://jayanth-portfolio-9y1p.onrender.com/)
 
-### GitHub Pages
+Render can automatically deploy updates when new commits are pushed to the connected branch.
 
-1. Push the project to a GitHub repository on the `main` branch.
-2. In the repository open **Settings → Pages** and set **Source** to **GitHub Actions**.
-3. Push to `main`. The workflow in `.github/workflows/deploy.yml` builds the site and publishes it at `https://<username>.github.io/<repository>/`.
+### Alternative hosting
+
+The project can also be deployed to Vercel by importing the GitHub repository, using `npm run build` as the build command and `dist` as the output directory.
 
 ### Custom domain
 
-Add the domain in the Vercel or Pages settings, then point your DNS records where the host tells you to.
+A custom domain can be configured through the hosting provider's settings after the domain is registered and its DNS records are configured correctly.
 
 ## Browser support
 
-Current Chrome, Edge, Firefox and Safari. The page is fully usable with JavaScript-rendered content but without WebGL, and with reduced motion enabled.
+Supports current versions of Chrome, Edge, Firefox and Safari. The portfolio works without WebGL and supports reduced-motion preferences.
 
 ## Accessibility
 
-Semantic landmarks, a skip link, visible focus rings, keyboard-operable menus, tabs, filters and chips, an accessible theme switch, `aria-live` regions where content changes, links that open in a new tab say so for screen readers, and colour is never the only signal.
+- Semantic page landmarks and a skip link.
+- Visible keyboard focus indicators.
+- Keyboard-operable menus, tabs, filters and chips.
+- An accessible theme switch.
+- `aria-live` regions for dynamic content.
+- Links that open in new tabs are identified for screen readers.
+- Colour is never the only way information is communicated.
