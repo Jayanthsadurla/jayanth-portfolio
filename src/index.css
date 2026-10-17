@@ -1,0 +1,428 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ------------------------------------------------------------------ */
+/* Design tokens. Colours are space-separated RGB triplets so Tailwind  */
+/* can apply alpha (bg-blue/20) and both themes share one class list.   */
+/* ------------------------------------------------------------------ */
+:root,
+[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: 6 10 24;
+  --elevated: 13 20 44;
+  --fg: 232 238 252;
+  --muted: 152 166 198;
+  --line: 255 255 255;
+  --blue: 91 140 255;
+  --cyan: 34 211 238;
+  --violet: 176 148 255;
+  --mint: 74 222 128;
+  --on-accent: 4 12 30;
+  --glass-highlight: 255 255 255;
+  --shadow: 0 0 0;
+  --glass-alpha: 0.55;
+  --danger: 255 128 128;
+}
+
+[data-theme='light'] {
+  color-scheme: light;
+  --bg: 245 247 252;
+  --elevated: 255 255 255;
+  --fg: 14 22 50;
+  --muted: 66 80 114;
+  --line: 14 22 50;
+  --blue: 37 84 235;
+  --cyan: 2 116 144;
+  --violet: 109 40 217;
+  --mint: 21 118 58;
+  --on-accent: 255 255 255;
+  --glass-highlight: 255 255 255;
+  --shadow: 30 41 90;
+  --glass-alpha: 0.72;
+  --danger: 185 28 28;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-bg font-sans text-fg antialiased;
+    min-height: 100vh;
+    overflow-x: hidden;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display tracking-tight;
+  }
+
+  ::selection {
+    background: rgb(var(--blue) / 0.35);
+    color: rgb(var(--fg));
+  }
+
+  :focus-visible {
+    outline: 2px solid rgb(var(--cyan));
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  /* Sections receive focus after a nav jump; no ring needed on the container. */
+  section[tabindex='-1']:focus {
+    outline: none;
+  }
+
+  [id] {
+    scroll-margin-top: 5.5rem;
+  }
+}
+
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-[1200px] px-5 sm:px-8;
+  }
+
+  .glass {
+    background: rgb(var(--elevated) / var(--glass-alpha));
+    -webkit-backdrop-filter: blur(18px) saturate(150%);
+    backdrop-filter: blur(18px) saturate(150%);
+    border: 1px solid rgb(var(--line) / 0.1);
+    @apply shadow-glass;
+  }
+
+  .text-gradient {
+    background-image: linear-gradient(100deg, rgb(var(--cyan)) 0%, rgb(var(--blue)) 48%, rgb(var(--violet)) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .eyebrow {
+    @apply font-mono text-xs font-medium uppercase tracking-[0.18em] text-cyan;
+  }
+
+  .btn {
+    @apply relative inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold;
+    transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s ease, background-color 0.25s ease,
+      border-color 0.25s ease;
+  }
+  .btn:active {
+    transform: translateY(0) scale(0.985);
+  }
+
+  .btn-primary {
+    background-image: linear-gradient(120deg, rgb(var(--cyan)), rgb(var(--blue)) 60%, rgb(var(--violet)));
+    color: rgb(var(--on-accent));
+    box-shadow: 0 10px 30px -12px rgb(var(--blue) / 0.8);
+  }
+  [data-theme='light'] .btn-primary {
+    background-image: linear-gradient(120deg, rgb(var(--blue)), rgb(var(--violet)));
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 36px -12px rgb(var(--blue) / 0.9);
+  }
+
+  .btn-ghost {
+    @apply border text-fg;
+    border-color: rgb(var(--line) / 0.18);
+    background: rgb(var(--elevated) / 0.4);
+  }
+  .btn-ghost:hover {
+    transform: translateY(-2px);
+    border-color: rgb(var(--cyan) / 0.7);
+    background: rgb(var(--cyan) / 0.08);
+  }
+
+  .chip {
+    @apply inline-flex items-center rounded-full border px-2.5 py-1 font-mono text-[11px] font-medium leading-none text-muted;
+    border-color: rgb(var(--line) / 0.14);
+    background: rgb(var(--line) / 0.04);
+  }
+}
+
+/* Fixed, non-interactive atmosphere behind everything. */
+.page-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    radial-gradient(60rem 38rem at 88% -8%, rgb(var(--blue) / 0.2), transparent 62%),
+    radial-gradient(48rem 34rem at -8% 24%, rgb(var(--violet) / 0.14), transparent 62%),
+    radial-gradient(44rem 30rem at 50% 112%, rgb(var(--cyan) / 0.11), transparent 62%),
+    rgb(var(--bg));
+}
+.page-grid {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgb(var(--line) / 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--line) / 0.055) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 0%, transparent 78%);
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 0%, transparent 78%);
+}
+
+/* Smooth theme crossfade; applied for ~500ms by ThemeProvider while toggling. */
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+  transition:
+    background-color 0.45s ease,
+    color 0.45s ease,
+    border-color 0.45s ease,
+    fill 0.45s ease,
+    stroke 0.45s ease,
+    box-shadow 0.45s ease !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.001ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Loading screen */
+@keyframes loader-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.88);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes loader-bar {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+.loader-pop {
+  animation: loader-pop 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.loader-bar {
+  animation: loader-bar 0.75s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* Hero fallback visual */
+@keyframes fallback-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -6px, 0);
+  }
+}
+.fallback-float {
+  animation: fallback-float 8s ease-in-out infinite;
+}
+
+/* ------------------------------------------------------------------ */
+/* Hero text reveal: one orchestrated entrance once the loader leaves. */
+/* ------------------------------------------------------------------ */
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 22px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+.hero-line {
+  opacity: 0;
+}
+[data-hero-ready='true'] .hero-line {
+  animation: hero-rise 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: var(--d, 0ms);
+}
+
+/* ------------------------------------------------------------------ */
+/* Guide avatar. Transform/opacity only. Nothing here reads the pointer */
+/* or the scroll position: after the entrance the guide stays put.      */
+/* ------------------------------------------------------------------ */
+@keyframes av-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 34px, 0) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+@keyframes av-breathe {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -1.8px, 0);
+  }
+}
+@keyframes av-head {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  35% {
+    transform: rotate(-1.8deg);
+  }
+  70% {
+    transform: rotate(1.4deg);
+  }
+}
+@keyframes av-blink {
+  0%,
+  93%,
+  100% {
+    transform: scaleY(1);
+  }
+  96.5% {
+    transform: scaleY(0.08);
+  }
+}
+/* Rest pose hides the arm behind the torso (-112deg); the wave plays once. */
+@keyframes av-wave {
+  0% {
+    transform: rotate(-112deg);
+  }
+  22% {
+    transform: rotate(-6deg);
+  }
+  34% {
+    transform: rotate(14deg);
+  }
+  46% {
+    transform: rotate(-8deg);
+  }
+  58% {
+    transform: rotate(14deg);
+  }
+  70% {
+    transform: rotate(-4deg);
+  }
+  100% {
+    transform: rotate(-112deg);
+  }
+}
+
+.av-stage {
+  opacity: 0;
+}
+.av-stage[data-ready='true'] {
+  animation: av-enter 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.25s both;
+}
+
+.av-breathe,
+.av-head,
+.av-blink,
+.av-arm,
+.av-arm-rest {
+  transform-box: view-box;
+}
+.av-breathe {
+  animation: av-breathe 4.8s ease-in-out infinite;
+}
+.av-head {
+  transform-origin: 100px 168px;
+  animation: av-head 11s ease-in-out infinite;
+}
+.av-blink {
+  transform-origin: 100px 124px;
+  animation: av-blink 5.2s ease-in-out infinite;
+}
+.av-arm,
+.av-arm-rest {
+  transform-origin: 152px 208px;
+  transform: rotate(-112deg);
+}
+.av-arm {
+  animation: av-wave 2.4s ease-in-out 1.5s both;
+}
+
+/* Speech bubble reveal. */
+.bubble {
+  transition:
+    opacity 0.45s ease,
+    transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
+    visibility 0s linear 0s;
+}
+.bubble[data-visible='false'] {
+  opacity: 0;
+  visibility: hidden;
+  transform: translate3d(0, 8px, 0) scale(0.97);
+  transition-property: opacity, transform;
+}
+.caret {
+  display: inline-block;
+  width: 0.5ch;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: -0.12em;
+  background: rgb(var(--cyan));
+  animation: caret-blink 1s steps(1) infinite;
+}
+@keyframes caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Skills: chips arrive in a short stagger when a category is selected. */
+@keyframes chip-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+.skill-chip {
+  animation: chip-in 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: calc(var(--i, 0) * 45ms);
+}
+/* Skills: the selected spoke draws itself once. */
+@keyframes spoke-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.spoke-draw {
+  stroke-dasharray: 1;
+  animation: spoke-draw 0.7s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
